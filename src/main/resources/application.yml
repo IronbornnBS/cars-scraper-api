@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: cars-scraper-api
+
+website:
+  urls:
+    ikman: https://ikman.lk/en/ads/sri-lanka/vehicles?sort=relevance&buy_now=0&urgent=0&query=
+    riyasewana: https://riyasewana.com/search/
