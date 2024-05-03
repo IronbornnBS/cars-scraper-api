@@ -20,8 +20,13 @@ public class ScraperController {
         this.scraperService = scraperService;
     }
 
-    @GetMapping(path = "/{vehicleModel}")
+    @GetMapping(path = "ikman/{vehicleModel}")
     public Mono<List<ResponseDTO>> getIkVehicle(@PathVariable String vehicleModel) {
         return  scraperService.extractDataFromIk(vehicleModel);
+    }
+
+    @GetMapping(path = "riya/{vehicleModel}")
+    public Mono<List<ResponseDTO>> getRiyaVehicle(@PathVariable String vehicleModel) {
+        return  scraperService.extractDataFromRiya(vehicleModel);
     }
 }

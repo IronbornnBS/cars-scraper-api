@@ -20,6 +20,9 @@ public class ScraperService {
     @Value("${website.urls.ikman}")
     private String ikmanUrl;
 
+    @Value("${website.urls.riyasewana}")
+    private String riyaUrl;
+
     public Mono<List<ResponseDTO>> extractDataFromIk(String vehicleModel) {
         List<ResponseDTO> ResponseDTOS = new ArrayList<>();
 
@@ -29,7 +32,7 @@ public class ScraperService {
 
             Elements elements = Objects.requireNonNull(element).getElementsByTag("a");
 
-            for (Element ads: elements) {
+            for (Element ads : elements) {
 
                 ResponseDTO responseDTO = new ResponseDTO();
 
@@ -37,9 +40,7 @@ public class ScraperService {
                     responseDTO.setTitle(ads.attr("title"));
                     responseDTO.setUrl("https://ikman.lk" + ads.attr("href"));
                 }
-
                 if (responseDTO.getUrl() != null) ResponseDTOS.add(responseDTO);
-
             }
 
 
@@ -48,6 +49,33 @@ public class ScraperService {
         }
 
         return Mono.just(ResponseDTOS);
+    }
+
+    public Mono<List<ResponseDTO>> extractDataFromRiya(String vehicleModel) {
+        List<ResponseDTO> responseDTOS = new ArrayList<>();
+
+        try {
+
+            Document document = Jsoup.connect(riyaUrl + vehicleModel).get();
+            Element element = document.getElementById("content");
+
+            Elements elements = Objects.requireNonNull(element).getElementsByTag("a");
+
+            for (Element ads : elements) {
+                ResponseDTO responseDTO = new ResponseDTO();
+
+                if (!StringUtils.isEmpty(ads.attr("title"))) {
+                    responseDTO.setTitle(ads.attr("title"));
+                    responseDTO.setUrl(ads.attr("href"));
+                }
+                if (responseDTO.getUrl() != null) responseDTOS.add(responseDTO);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return Mono.just(responseDTOS);
     }
 
 }
